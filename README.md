@@ -110,5 +110,6 @@ As you embark on implementing these features, remember the value of tackling the
 # Loom video Presentation 
 https://www.loom.com/share/a526ad72ec864537afeeed812e22eaec?sid=e5d5a168-500d-4f93-bc79-a889c133eef8
 
-# Google sles video Presentation
-
+# Google slides video Presentation
+https://docs.google.com/presentation/d/1qzyesx_OgxRgAu8259tc12-HfuFocJ42TxVXugUurug/edit#slide=id.gd5b15f0a3_5_26
+https://www.loom.com/share/bf270e204e604c749d6daad3508ef7e8?sid=c2bea5ce-d7dd-4f86-a679-4e68773ee30a
