@@ -1,6 +1,8 @@
-// Import helper functions from utils
+// TASK: import helper functions from utils
 import { getTasks, createNewTask } from './utils/taskFunctions.js';
+// TASK: import initialData
 import {initialData} from './initialData.js';
+
 
 /*************************************************************************************************************************************************
  * FIX BUGS!!!
@@ -65,13 +67,14 @@ const elements = {
 let activeBoard = "";
 
 // Extracts unique board names from tasks
+// TASK: FIX BUGS
 function fetchAndDisplayBoardsAndTasks() {
   const tasks = getTasks();
   const boards = [...new Set(tasks.map(task => task.board).filter(Boolean))];
   displayBoards(boards);
   
   if (boards.length > 0) {
-    activeBoard = JSON.parse(localStorage.getItem("activeBoard")) || boards[0];
+    activeBoard = JSON.parse(localStorage.getItem("activeBoard")) || boards[0]; // Fixed ternary operator
     elements.headerBoardName.textContent = activeBoard;
     styleActiveBoard(activeBoard);
     refreshTasksUI();
@@ -104,7 +107,7 @@ function displayBoards(boards) {
 function filterAndDisplayTasksByBoard(boardName) {
   const tasks = getTasks(); 
 
-   // FIX BUG: Corrected the assignment to strict equality check (===) instead of a single (=)
+   // FIX BUG: Corrected the assignment operator to comparison operator (===)  instead of a single (=)
   const filteredTasks = tasks.filter(task => task.board === boardName);
 
   [elements.todoColumn, elements.doingColumn, elements.doneColumn].forEach(column => {
@@ -117,7 +120,7 @@ function filterAndDisplayTasksByBoard(boardName) {
     const tasksContainer = document.createElement("div");
     column.appendChild(tasksContainer);
 
-    // FIX BUG: Corrected another assignment to strict equality check (===)
+    // FIX BUG: Corrected another assignment operator to comparison operator (===) 
     filteredTasks.filter(task => task.status === status).forEach(task => { 
       const taskElement = document.createElement("div");
       taskElement.classList.add("task-div");
@@ -143,7 +146,7 @@ function styleActiveBoard(boardName) {
   document.querySelectorAll('.board-btn').forEach(btn => { // FIX BUG: Corrected 'foreach' to 'forEach'
 
     if (btn.textContent === boardName) {
-      btn.classList.add('active'); // FIX BUG: Added 'classList.' before 'remove'
+      btn.classList.add('active'); // FIX BUG: Added 'classList.' before 'add'
     } else {
       btn.classList.remove('active'); // FIX BUG: Added 'classList.' before 'remove'
     }
@@ -159,7 +162,7 @@ function addTaskToUI(task) {
 
   let tasksContainer = column.querySelector('.tasks-container');
   if (!tasksContainer) {
-    console.warn(`Tasks container not found for status: ${task.status}, creating one.`);
+    
     tasksContainer = document.createElement('div');
     tasksContainer.className = 'tasks-container';
     column.appendChild(tasksContainer);
@@ -244,7 +247,7 @@ function toggleSidebar(show) {
 }
 
 function openEditTaskModal(task) {
-  // Set task details in modal inputs
+  // Get button elements from the task modal
   elements.editTaskTitleInput.value = task.title;
   elements.editTaskDescInput.value = task.description;
   elements.editSelectStatus.value = task.status;
@@ -264,16 +267,29 @@ function openEditTaskModal(task) {
 }
 
 function saveTaskChanges(taskId) {
-  // Implemented task update functionality
+  // Get new user inputs
   const updatedTask = {
+    // Create an object with the updated task details
     id: taskId,
     title: elements.editTaskTitleInput.value,
     description: elements.editTaskDescInput.value,
     status: elements.editSelectStatus.value
   };
 
+  // Update task using a helper function
+  const tasks = getTasks(); // Fetch the current tasks from local storage or your state
+  const taskIndex = tasks.findIndex(task => task.id === taskId); // Find the index of the task to update
+
+  if (taskIndex !== -1) {
+    // If the task is found, update it
+    tasks[taskIndex] = updatedTask;
+    localStorage.setItem('tasks', JSON.stringify(tasks)); // Save the updated tasks array to local storage
+  } else {
+    console.error(`Task with id ${taskId} not found.`);
+  }
+
   // Close the modal and refresh the UI
-  toggleModal(false, elements.editTaskModalWindow);
+  toggleModal(false, elements.editTaskModal);
   refreshTasksUI();
 }
 
@@ -296,6 +312,6 @@ function init() {
   toggleSidebar(showSidebar);
   const isLightTheme = localStorage.getItem('light-theme') === 'enabled';
   document.body.classList.toggle('light-theme', isLightTheme);
-  initializeData(); // Initialize data on load
+  initializeData(); 
   fetchAndDisplayBoardsAndTasks(); // Initial display of boards and tasks
 }
