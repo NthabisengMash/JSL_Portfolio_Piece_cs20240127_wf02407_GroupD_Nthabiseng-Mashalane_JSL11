@@ -87,6 +87,7 @@ function displayBoards(boards) {
     boardElement.textContent = board;
     boardElement.classList.add("board-btn");
 
+    // FIX BUG: Corrected the 'click' event listener to 'addEventListener'
     boardElement.addEventListener('click', () => {
       elements.headerBoardName.textContent = board;
       activeBoard = board; // Assigns active board
@@ -102,6 +103,8 @@ function displayBoards(boards) {
 // Filters tasks corresponding to the board name and displays them on the DOM
 function filterAndDisplayTasksByBoard(boardName) {
   const tasks = getTasks(); 
+
+   // FIX BUG: Corrected the assignment to strict equality check (===) instead of a single (=)
   const filteredTasks = tasks.filter(task => task.board === boardName);
 
   [elements.todoColumn, elements.doingColumn, elements.doneColumn].forEach(column => {
@@ -114,12 +117,14 @@ function filterAndDisplayTasksByBoard(boardName) {
     const tasksContainer = document.createElement("div");
     column.appendChild(tasksContainer);
 
+    // FIX BUG: Corrected another assignment to strict equality check (===)
     filteredTasks.filter(task => task.status === status).forEach(task => { 
       const taskElement = document.createElement("div");
       taskElement.classList.add("task-div");
       taskElement.textContent = task.title;
       taskElement.setAttribute('data-task-id', task.id);
 
+      // FIX BUG: Corrected the 'click' event listener to 'addEventListener'
       taskElement.addEventListener('click', () => { 
         openEditTaskModal(task);
       });
@@ -135,11 +140,12 @@ function refreshTasksUI() {
 
 // Styles the active board by adding an active class
 function styleActiveBoard(boardName) {
-  document.querySelectorAll('.board-btn').forEach(btn => { 
+  document.querySelectorAll('.board-btn').forEach(btn => { // FIX BUG: Corrected 'foreach' to 'forEach'
+
     if (btn.textContent === boardName) {
-      btn.classList.add('active'); 
+      btn.classList.add('active'); // FIX BUG: Added 'classList.' before 'remove'
     } else {
-      btn.classList.remove('active'); 
+      btn.classList.remove('active'); // FIX BUG: Added 'classList.' before 'remove'
     }
   });
 }
@@ -164,11 +170,12 @@ function addTaskToUI(task) {
   taskElement.textContent = task.title; 
   taskElement.setAttribute('data-task-id', task.id);
   
-  tasksContainer.appendChild(taskElement); 
+  tasksContainer.appendChild(taskElement); // FIX BUG: Added taskElement inside appendChild
 }
 
 function setupEventListeners() {
   // Cancel editing task event listener
+  // FIX BUG: Corrected 'click()' to 'addEventListener' and arrow function syntax
   elements.cancelEditButton.addEventListener('click', () => toggleModal(false, elements.editTaskModalWindow));
 
   // Cancel adding new task event listener
@@ -184,6 +191,7 @@ function setupEventListeners() {
   });
 
   // Show sidebar event listener
+  // FIX BUG: Corrected 'click()' to 'addEventListener' and arrow function syntax
   elements.hideSideBarButton.addEventListener('click', () => toggleSidebar(false));
   elements.showSideBarButton.addEventListener('click', () => toggleSidebar(true));
 
@@ -201,6 +209,7 @@ function setupEventListeners() {
 
 // Toggles tasks modal
 function toggleModal(show, modal = elements.newTaskModalWindow) {
+  // FIX BUG: Corrected arrow function syntax in ternary operator
   modal.style.display = show ? 'block' : 'none'; 
 }
 
@@ -217,7 +226,7 @@ function addTask(event) {
     description: elements.modalDescInput.value,
     status: elements.modalSelectStatus.value,
     board: activeBoard,
-    id: Date.now(), // or use a UUID library for unique IDs
+    id: Date.now(), 
   };
   
   const newTask = createNewTask(task);
@@ -255,7 +264,7 @@ function openEditTaskModal(task) {
 }
 
 function saveTaskChanges(taskId) {
-  // Get new user inputs
+  // Implemented task update functionality
   const updatedTask = {
     id: taskId,
     title: elements.editTaskTitleInput.value,
@@ -268,6 +277,7 @@ function saveTaskChanges(taskId) {
   refreshTasksUI();
 }
 
+ //Implemented task update functionality
 function deleteTask(taskId) {
   const tasks = getTasks().filter(task => task.id !== taskId);
   localStorage.setItem('tasks', JSON.stringify(tasks));
